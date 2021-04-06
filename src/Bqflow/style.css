@@ -1,0 +1,213 @@
+* {
+  margin: 0;
+  padding: 0;
+  border: none;
+  box-sizing: border-box;
+  font-family: Roboto, Lato, Helvetica, Arial, sans-serif;
+  color: #030303;
+}
+
+html,
+body,
+#root {
+  min-height: 100vh;
+  width: 100%;
+}
+
+.bqflow {
+  display: flex;
+}
+
+.bqflow .palette {
+  position: fixed;
+  left: 0;
+  top: 0;
+  background: #fff;
+  width: 200px;
+  min-height: 100vh;
+  border-right: 1px solid lightgray;
+}
+.bqflow .add-swim-btn {
+  padding: 10px;
+  width: 100%;
+  cursor: pointer;
+  background: #232840;
+  color: #fff;
+  border: 2px solid transparent;
+  transition: all 0.3s;
+}
+.bqflow .add-swim-btn:hover {
+  border-color: #232840;
+  background-color: #fff;
+  color: #232840;
+}
+
+.bqflow .add-swim-btn:active,
+.bqflow .add-swim-btn:focus {
+  outline: none;
+}
+
+aside {
+  width: 250px;
+}
+
+.palette {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.shape {
+  margin: 10px;
+  height: 100px;
+  width: 150px;
+  border: solid 2px black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+}
+
+.circle {
+  width: 100px;
+  border-radius: 50%;
+}
+
+.square {
+  width: 75px;
+  height: 75px;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+
+.properties {
+  margin-top: 10px;
+}
+
+.key {
+  color: lightslategray;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  align-items: center;
+  height: 25px;
+}
+
+.value {
+  color: darkslategray;
+  font-weight: bolder;
+}
+
+.no-data {
+  color: darkslategray;
+}
+
+.canvas {
+  /* width: calc(100% - 200px); */
+  border: 1px solid lightgray;
+  position: relative;
+  display: flex;
+}
+
+main.canvas .swim-no {
+  max-width: 50px;
+  writing-mode: vertical-lr;
+  transform: rotate(180deg);
+  text-align: center;
+  border-left: 1px solid lightgray;
+  padding: 5px;
+}
+main.canvas .remove {
+  cursor: pointer;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  z-index: 2;
+  font-size: 14px;
+}
+
+.buttons {
+  display: flex;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.buttons button {
+  margin: 4px;
+  height: 30px;
+  text-transform: uppercase;
+  cursor: pointer;
+  background: lightgray;
+  transition: all 0.25s ease-in;
+  z-index: 10;
+  padding: 0 8px;
+  border-radius: 4px;
+}
+
+.buttons button:hover {
+  background: darkgray;
+}
+
+.swimlanes {
+  position: relative;
+  padding-top: 40px;
+  flex: 1;
+}
+.side-buttons-parent {
+  flex-wrap: column;
+}
+
+.side-buttons button {
+  margin: 7px 0;
+  height: 30px;
+  text-transform: uppercase;
+  cursor: pointer;
+  background: lightgray;
+  transition: all 0.25s ease-in;
+  z-index: 10;
+  padding: 0 8px;
+  border-radius: 4px;
+  width: 100%;
+}
+
+.property-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  margin-left: 200px;
+  width: 100%;
+}
+
+.bqflow .swimlanes {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.bqflow .text-update {
+  flex-direction: column;
+}
+.bqflow .text-update #text {
+  width: 100%;
+  border: 1px solid #ddd;
+  padding: 5px;
+  font-size: 14px;
+  border-radius: 0;
+  margin: 10px 0;
+}
+.bqflow .text-update #text:focus,
+.bqflow .text-update #text:active {
+  outline: none;
+}

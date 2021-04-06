@@ -1,0 +1,168 @@
+import { nanoid } from "nanoid";
+import { useShapes, setState, clearSelection } from "./state";
+
+// ############## SET INITIAL LINE POINTS ##############
+
+export const setInitialPoint = (shape, shapeId, swimlaneId) => {
+  // console.log(`shape,shapeId,swimlaneId`, shape, shapeId, swimlaneId);
+  const mainState = useShapes.get();
+  const uniqueId = nanoid();
+
+  setState((state) => {
+    const swimlane = mainState.swimlanes[swimlaneId];
+    const { xPos: x, yPos: y } = calucaltePoints(shape, swimlane);
+
+    if (swimlane.lastId == null) {
+      state.swimlanes[swimlaneId].lastId = uniqueId;
+      state.swimlanes[swimlaneId].lines[uniqueId] = {
+        startId: shapeId,
+        endId: null,
+        points: [x, y],
+        fill: "#" + (((1 << 24) * Math.random()) | 0).toString(16),
+      };
+    }
+
+    if (swimlane.lastId && swimlane.lines[swimlane.lastId].endId == null) {
+      state.swimlanes[swimlaneId].lines[swimlane.lastId].endId = shapeId;
+      const [startX, startY] = swimlane.lines[swimlane.lastId].points;
+      console.log(`prevPoints`, startX, startY, x, y);
+      if (startX > x && startY < y) {
+        // ##### BELOW AND BEFORE #####
+        state.swimlanes[swimlaneId].lines[swimlane.lastId].points = [
+          startX,
+          startY,
+          startX + 10,
+          startY,
+          startX + 10,
+          y - startY + startY,
+          x,
+          y,
+        ];
+      } else if (startX > x && startY > y) {
+        // ##### BELOW AND ABOVE #####
+        state.swimlanes[swimlaneId].lines[swimlane.lastId].points = [
+          startX,
+          startY,
+          startX + 10,
+          startY,
+          startX + 10,
+          y + startY - startY,
+          x,
+          y,
+        ];
+      } else if (startY == y) {
+        state.swimlanes[swimlaneId].lines[swimlane.lastId].points = [
+          startX,
+          startY,
+          x,
+          y,
+        ];
+      } else if (startY < y) {
+        state.swimlanes[swimlaneId].lines[swimlane.lastId].points = [
+          startX,
+          startY,
+          startX + (x - startX) / 2,
+          startY,
+          startX + (x - startX) / 2,
+          y,
+          x,
+          y,
+        ];
+      } else if (startY > y) {
+        state.swimlanes[swimlaneId].lines[swimlane.lastId].points = [
+          startX,
+          startY,
+          startX + (x - startX) / 2,
+          startY,
+          startX + (x - startX) / 2,
+          y,
+          x,
+          y,
+        ];
+      }
+    } else {
+      state.swimlanes[swimlaneId].lastId = uniqueId;
+      state.swimlanes[swimlaneId].lines[uniqueId] = {
+        startId: shapeId,
+        endId: null,
+        points: [x, y],
+        fill: "#" + (((1 << 24) * Math.random()) | 0).toString(16),
+      };
+    }
+  });
+};
+
+// ########### UPDATE POINTS ################
+export const updateLinePoint = (e, shapeId, swimlaneId) => {
+  const mainState = useShapes.get();
+
+  setState((state) => {
+    const swimlane = mainState.swimlanes[swimlaneId];
+    const shape = mainState.swimlanes[swimlaneId].shapes[shapeId];
+    console.log(`shape`, shape);
+    const { xPos: x, yPos: y } = calucaltePoints(shape, swimlane);
+    for (const key in swimlane.lines) {
+      const points = state.swimlanes[swimlaneId].lines[key].points;
+      if (swimlane.lines[key].startId === shapeId) {
+        points[0] = x;
+        points[1] = y;
+      } else if (swimlane.lines[key].endId === shapeId) {
+        points[points.length - 1] = y;
+        const type = shape.type.type.toLowerCase();
+        if (type === "circle") {
+          points[points.length - 2] = x - shape.radius * 2;
+        } else if (type === "rectangle") {
+          points[points.length - 2] = x - shape.width;
+        } else if (type === "square") {
+          console.log(` x - shape.width`, x - shape.width);
+          points[points.length - 2] = x - shape.width;
+        }
+      }
+    }
+  });
+};
+
+// ########### DELETE UNWANTED STARTING POINT ################
+const deleteStartPoint = (shape, shapeId, swimlaneId) => {};
+
+// ########### CALCULATE START AND END POINTS ################
+const calucaltePoints = (shape, swimlane) => {
+  const type = shape.type.type.toLowerCase();
+  // console.log(`shape,type`, shape, type);
+  let xPos = 0,
+    yPos = 0;
+  const lastId = swimlane.lastId;
+  const lines = swimlane.lines;
+
+  if (type === "rectangle") {
+    if (lastId && lines[lastId].endId === null) {
+      xPos = shape.x;
+      yPos = shape.y + shape.height / 2;
+    } else {
+      xPos = shape.x + shape.width;
+      yPos = shape.y + shape.height / 2;
+    }
+    return { xPos, yPos };
+  } else if (type === "circle") {
+    if (lastId && lines[lastId].endId === null) {
+      xPos = shape.x - shape.radius;
+      yPos = shape.y;
+    } else {
+      xPos = shape.x + shape.radius;
+      yPos = shape.y;
+    }
+
+    return { xPos, yPos };
+  } else if (type === "square") {
+    if (lastId && lines[lastId].endId === null) {
+      xPos = shape.x;
+      yPos = shape.y + shape.height / 2;
+    } else {
+      xPos = shape.x + shape.width;
+      yPos = shape.y + shape.height / 2;
+    }
+    return { xPos, yPos };
+  }
+
+  return { xPos, yPos };
+};

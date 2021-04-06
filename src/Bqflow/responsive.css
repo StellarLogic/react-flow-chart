@@ -1,0 +1,38 @@
+@media (max-width: 1200px) {
+  .property-wrapper {
+    flex-direction: column;
+    width: 100%;
+  }
+  .swimlanes {
+    order: 2;
+  }
+  .panel {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .bqflow {
+    display: flex;
+    flex-direction: column;
+  }
+  .bqflow .palette {
+    position: relative;
+    width: 100%;
+    overflow-x: scroll;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .bqflow h2 {
+    flex-basis: 100%;
+    width: 100%;
+  }
+
+  .bqflow .property-wrapper {
+    margin-left: 0;
+  }
+  .bqflow .swimlanes {
+    width: 100%;
+  }
+}
