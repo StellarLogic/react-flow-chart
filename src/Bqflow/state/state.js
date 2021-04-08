@@ -9,11 +9,17 @@ const APP_NAMESPACE = "__integrtr_diagrams__";
 
 const baseState = {
   selectedSwimlane: null,
+  copiedShape: {},
+  ccp: false,
   swimlanes: {
     selected: null,
     shapes: {},
     lastId: null,
     lines: {},
+    canvas: {
+      height: 350,
+      width: 0,
+    },
   },
 };
 
@@ -32,6 +38,10 @@ export const addSwimLane = () => {
       shapes: {},
       lastId: null,
       lines: {},
+      canvas: {
+        height: 350,
+        width: 0,
+      },
     };
   });
 };
@@ -121,6 +131,7 @@ export const selectShape = (swimlaneId, id) => {
 
     state.swimlanes[swimlaneId].selected = id;
     state.selectedSwimlane = swimlaneId;
+    state.ccp = false;
   });
 };
 
@@ -272,5 +283,13 @@ export const transformCircleShape = (node, swimlaneId, id, event) => {
 export const updateText = (value, swimlaneId, shapeId) => {
   setState((state) => {
     state.swimlanes[swimlaneId].shapes[shapeId].type.text = value;
+  });
+};
+
+//############## UPDATE TEXT #####################
+export const updateStateFromFile = (value) => {
+  console.log(`value`, value);
+  setState((state) => {
+    // state.swimlanes = value;
   });
 };

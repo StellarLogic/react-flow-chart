@@ -1,19 +1,19 @@
 import React, { useState } from "react";
 import { Palette } from "./Palette";
 import { Canvas } from "./Canvas";
-import { PropertiesPanel } from "./PropertiesPanel";
+import { PropertiesPanel } from "./components/sidebar/PropertiesPanel";
 import { useShapes, addSwimLane, saveDiagram, reset } from "./state/state";
 import "./style.css";
 import "./responsive.css";
 import Json from "./Json/Json";
+import Ccp from "./components/sidebar/Ccp";
 
 function Bqflow({ palette = [] }) {
-  const { selectedSwimlane, swimlanes } = useShapes((state) => state);
+  const { selectedSwimlane, swimlanes, ccp } = useShapes((state) => state);
   const [isJsonActive, setisJsonActive] = useState(false);
-  // console.log(
-  //   `Object.entries(swimlanes)[0].lines`,
-  //   Object.entries(swimlanes)[0][1].lines
-  // );
+  const state = useShapes((state) => state);
+  console.log(`Object.entries(swimlanes)[0].lines`, state);
+
   const handleScreen = () => {
     setisJsonActive(!isJsonActive);
   };
@@ -49,7 +49,7 @@ function Bqflow({ palette = [] }) {
                   );
                 })}
             </div>
-            {selectedSwimlane ? <PropertiesPanel /> : null}
+            {selectedSwimlane ? !ccp ? <PropertiesPanel /> : <Ccp /> : null}
           </div>
         </div>
       )}

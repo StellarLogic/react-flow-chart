@@ -2,8 +2,8 @@ import React from "react";
 import { reset, saveDiagram, useShapes } from "../state/state";
 
 const Json = ({ handleJson }) => {
-  const state = useShapes((state) => state);
-  console.log(`json`, state);
+  const state = useShapes((state) => state.swimlanes);
+  console.log(`json`, state.swimlanes);
   return (
     <div className="json">
       <div className="buttons">

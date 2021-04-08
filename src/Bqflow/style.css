@@ -35,6 +35,7 @@ body,
   color: #fff;
   border: 2px solid transparent;
   transition: all 0.3s;
+  border-radius: 0;
 }
 .bqflow .add-swim-btn:hover {
   border-color: #232840;

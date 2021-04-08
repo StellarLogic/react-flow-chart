@@ -22,35 +22,137 @@ export const setInitialPoint = (shape, shapeId, swimlaneId) => {
       };
     }
 
+    if (
+      swimlane.lastId &&
+      swimlane.lines[swimlane.lastId].endId === null &&
+      swimlane.lines[swimlane.lastId].startId == shapeId
+    ) {
+      return;
+    }
+
     if (swimlane.lastId && swimlane.lines[swimlane.lastId].endId == null) {
       state.swimlanes[swimlaneId].lines[swimlane.lastId].endId = shapeId;
+      const shape = swimlane.shapes[shapeId];
+      const type = swimlane.shapes[shapeId].type.type.toLowerCase();
       const [startX, startY] = swimlane.lines[swimlane.lastId].points;
       console.log(`prevPoints`, startX, startY, x, y);
+      console.log(`startX > x && startY < y`, startX > x, startY < y);
       if (startX > x && startY < y) {
         // ##### BELOW AND BEFORE #####
-        state.swimlanes[swimlaneId].lines[swimlane.lastId].points = [
-          startX,
-          startY,
-          startX + 10,
-          startY,
-          startX + 10,
-          y - startY + startY,
-          x,
-          y,
-        ];
+        if (type === "rectangle") {
+          state.swimlanes[swimlaneId].lines[swimlane.lastId].points = [
+            startX,
+            startY,
+            startX + 10,
+            startY,
+            startX + 10,
+            startY - 75,
+            x - 20,
+            startY - 75,
+            x - 20,
+            y,
+            x,
+            y,
+          ];
+        } else if (type === "square") {
+          state.swimlanes[swimlaneId].lines[swimlane.lastId].points = [
+            startX,
+            startY,
+            startX + 10,
+            startY,
+            startX + 10,
+            startY - 75,
+            x - 20,
+            startY - 75,
+            x - 20,
+            y,
+            x,
+            y,
+          ];
+        } else if (type === "cricle") {
+          state.swimlanes[swimlaneId].lines[swimlane.lastId].points = [
+            startX,
+            startY,
+            startX + 10,
+            startY,
+            startX + 10,
+            startY - 75,
+            x - 20,
+            startY - 75,
+            x - 20,
+            y,
+            x,
+            y,
+          ];
+        } else {
+          state.swimlanes[swimlaneId].lines[swimlane.lastId].points = [
+            startX,
+            startY,
+            startX + 10,
+            startY,
+            startX + 10,
+            y - startY + startY,
+            x,
+            y,
+          ];
+        }
       } else if (startX > x && startY > y) {
-        // ##### BELOW AND ABOVE #####
-        state.swimlanes[swimlaneId].lines[swimlane.lastId].points = [
-          startX,
-          startY,
-          startX + 10,
-          startY,
-          startX + 10,
-          y + startY - startY,
-          x,
-          y,
-        ];
+        // ##### BEFORE AND ABOVE #####
+        if (type === "rectangle") {
+          state.swimlanes[swimlaneId].lines[swimlane.lastId].points = [
+            startX,
+            startY,
+            startX + 10,
+            startY,
+            startX + 10,
+            startY + 75,
+            x - 20,
+            startY + 75,
+            x - 20,
+            y,
+            x,
+            y,
+          ];
+        } else if (type === "square") {
+          state.swimlanes[swimlaneId].lines[swimlane.lastId].points = [
+            startX,
+            startY,
+            startX + 10,
+            startY,
+            startX + 10,
+            startY + 75,
+            x - 20,
+            startY + 75,
+            x - 20,
+            y,
+            x,
+            y,
+          ];
+        } else if (type === "cricle") {
+          state.swimlanes[swimlaneId].lines[swimlane.lastId].points = [
+            startX,
+            startY,
+            startX + 10,
+            startY,
+            startX + 10,
+            y + startY - startY,
+            x,
+            y,
+          ];
+        } else {
+          state.swimlanes[swimlaneId].lines[swimlane.lastId].points = [
+            startX,
+            startY,
+            startX + 10,
+            startY,
+            startX + 10,
+            y + startY - startY,
+            x,
+            y,
+          ];
+        }
       } else if (startY == y) {
+        // ##### ON THE SAME LINE  #####
         state.swimlanes[swimlaneId].lines[swimlane.lastId].points = [
           startX,
           startY,
@@ -58,6 +160,7 @@ export const setInitialPoint = (shape, shapeId, swimlaneId) => {
           y,
         ];
       } else if (startY < y) {
+        // ##### ABOVE #####
         state.swimlanes[swimlaneId].lines[swimlane.lastId].points = [
           startX,
           startY,
@@ -69,6 +172,7 @@ export const setInitialPoint = (shape, shapeId, swimlaneId) => {
           y,
         ];
       } else if (startY > y) {
+        // ##### ABOVE #####
         state.swimlanes[swimlaneId].lines[swimlane.lastId].points = [
           startX,
           startY,
@@ -99,23 +203,38 @@ export const updateLinePoint = (e, shapeId, swimlaneId) => {
   setState((state) => {
     const swimlane = mainState.swimlanes[swimlaneId];
     const shape = mainState.swimlanes[swimlaneId].shapes[shapeId];
-    console.log(`shape`, shape);
+    const type = shape.type.type.toLowerCase();
     const { xPos: x, yPos: y } = calucaltePoints(shape, swimlane);
+
     for (const key in swimlane.lines) {
       const points = state.swimlanes[swimlaneId].lines[key].points;
       if (swimlane.lines[key].startId === shapeId) {
         points[0] = x;
         points[1] = y;
+
+        if (points.length == 8) {
+          points[3] = y;
+        }
       } else if (swimlane.lines[key].endId === shapeId) {
         points[points.length - 1] = y;
         const type = shape.type.type.toLowerCase();
+
         if (type === "circle") {
           points[points.length - 2] = x - shape.radius * 2;
+          if (points.length == 8) {
+            points[5] = y;
+          }
         } else if (type === "rectangle") {
           points[points.length - 2] = x - shape.width;
+          if (points.length == 8) {
+            points[5] = y;
+          }
         } else if (type === "square") {
           console.log(` x - shape.width`, x - shape.width);
           points[points.length - 2] = x - shape.width;
+          if (points.length == 8) {
+            points[5] = y;
+          }
         }
       }
     }
@@ -123,7 +242,20 @@ export const updateLinePoint = (e, shapeId, swimlaneId) => {
 };
 
 // ########### DELETE UNWANTED STARTING POINT ################
-const deleteStartPoint = (shape, shapeId, swimlaneId) => {};
+export const deleteStartPoint = (swimlane, swimlaneId) => {
+  const mainState = useShapes.get();
+  console.log(`swimlane`, swimlane.lines[swimlane.lastId]);
+  setState((state) => {
+    if (swimlane.lines[swimlane.lastId].endId == null) {
+      console.log(
+        `swimlane.lines[swimlane.lastId]`,
+        swimlane.lines[swimlane.lastId],
+        swimlaneId,
+        state.swimlanes[swimlaneId].lines[swimlane.lastId]
+      );
+    }
+  });
+};
 
 // ########### CALCULATE START AND END POINTS ################
 const calucaltePoints = (shape, swimlane) => {
@@ -166,3 +298,13 @@ const calucaltePoints = (shape, swimlane) => {
 
   return { xPos, yPos };
 };
+
+// ########### CANVAS HEIGHT UPDATE FUNCTION ################
+// export const updateCanvasHeight = (x, y, swimlaneId) => {
+//   // console.log(`object`, x, y);
+//   const mainState = useShapes.get();
+//   setState((state) => {
+//     // console.log(`mainState.swimlanes`, mainState.swimlanes);
+//     state.swimlanes[swimlaneId].canvas.height = y;
+//   });
+// };

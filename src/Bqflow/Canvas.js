@@ -6,11 +6,13 @@ import {
   createRectangle,
   createSquare,
   removeSwimlane,
+  setState,
   useShapes,
 } from "./state/state";
 import { DRAG_DATA_KEY, SHAPE_TYPES } from "./state/constants";
 import { Shape } from "./Shape";
 import { Line } from "./shapes/Line";
+import { selectSwimLane } from "./state/ccp";
 
 const handleDragOver = (event) => event.preventDefault();
 
@@ -71,8 +73,11 @@ export function Canvas({ id: swimlaneId, swimlane, index }) {
       <Stage
         ref={stageRef}
         width={window.innerWidth - 250}
-        height={350}
-        onClick={() => clearSelection(swimlaneId)}
+        height={swimlane.canvas.height || 350}
+        onClick={(e) => {
+          clearSelection(swimlaneId);
+          selectSwimLane(e, swimlaneId);
+        }}
       >
         <Layer>
           {shapes.length > 0 &&
@@ -83,7 +88,7 @@ export function Canvas({ id: swimlaneId, swimlane, index }) {
                 swimlaneId={swimlaneId}
               />
             ))}
-          {/* <Line {...{ points: [800, 78.5, 117, 10] }} /> */}
+          {/* <Line {...{ points: [246, 131] }} /> */}
           {linesArr.length > 0 &&
             linesArr.map(([key, line]) => <Line key={key} {...line} />)}
         </Layer>
