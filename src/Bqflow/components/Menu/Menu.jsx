@@ -43,7 +43,7 @@ const Menu = ({ clickedCan }) => {
         )}
         <li onClick={() => addSwimLane("top")}>Add Swimlane At Top</li>
         <li onClick={() => addSwimLane("bottom")}>Add Swimlane At Bottom</li>
-        {Object.entries(copiedShape.shape).length > 1 ? (
+        {Object.entries(copiedShape.shape).length >= 1 ? (
           <li onClick={() => past()}>Paste</li>
         ) : null}
         <li onClick={() => removeSwimlane(selectedSwimlane)}>
@@ -87,7 +87,7 @@ const Menu = ({ clickedCan }) => {
           Delete Start Point
         </li> */}
 
-        {Object.entries(copiedShape.shape).length > 1 && (
+        {Object.entries(copiedShape.shape) && (
           <>
             <li
               onClick={() =>
