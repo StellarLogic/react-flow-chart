@@ -1,3 +1,15 @@
+@media (min-width: 1440px) {
+  .bqflow .desc textarea {
+    width: 350px;
+  }
+  main.canvas .top .title.desc {
+    min-width: 380px;
+  }
+  main.canvas .top .title.process {
+    width: 100%;
+  }
+}
+
 @media (max-width: 1200px) {
   .property-wrapper {
     flex-direction: column;

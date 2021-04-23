@@ -1,21 +1,50 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Palette } from "./Palette";
-import { Canvas } from "./Canvas";
-import { PropertiesPanel } from "./components/sidebar/PropertiesPanel";
-import { useShapes, addSwimLane, saveDiagram, reset } from "./state/state";
+import Canvas from "./Canvas";
+import {
+  useShapes,
+  addSwimLane,
+  saveDiagram,
+  reset,
+  setState,
+  openMenu,
+  closeMenu,
+} from "./state/state";
 import "./style.css";
 import "./responsive.css";
 import Json from "./Json/Json";
-import Ccp from "./components/sidebar/Ccp";
+import Menu from "./components/Menu/Menu";
+import PropTypes from "prop-types";
 
-function Bqflow({ palette = [] }) {
+function Bqflow({ palette = [], data = {} }, ref) {
   const { selectedSwimlane, swimlanes, ccp } = useShapes((state) => state);
   const [isJsonActive, setisJsonActive] = useState(false);
+  const [selectedCanvas, setSelectedCanvas] = useState(null);
+  const propertyRef = useRef(null);
   const state = useShapes((state) => state);
-  console.log(`Object.entries(swimlanes)[0].lines`, state);
+  console.log(`state`, state);
+  // state.swimlanes[Object.keys(state.swimlanes)[0]].lastId,
+  // state.swimlanes[Object.keys(state.swimlanes)[0]].lines
+
+  useEffect(() => {
+    if (typeof data == "object" && Object.keys(data).length)
+      setState((state) => {
+        state.swimlanes = data;
+      });
+  }, []);
 
   const handleScreen = () => {
     setisJsonActive(!isJsonActive);
+  };
+
+  const sortedSwimlane = Object.entries(swimlanes).sort(
+    ([keyA, a], [keyB, b]) => {
+      return a.place - b.place;
+    }
+  );
+
+  const handleRef = (ref) => {
+    setSelectedCanvas(ref);
   };
 
   return (
@@ -23,38 +52,37 @@ function Bqflow({ palette = [] }) {
       {isJsonActive ? (
         <Json handleJson={handleScreen} />
       ) : (
-        <div className="bqflow">
+        <div
+          className="bqflow"
+          onContextMenu={(e) => openMenu(e, propertyRef)}
+          onClick={closeMenu}
+        >
+          <Menu clickedCan={selectedCanvas} />
           <Palette />
-          <div className="property-wrapper">
+          <div className="property-wrapper" ref={propertyRef}>
             <div className="swimlanes">
-              <button className="add-swim-btn" onClick={addSwimLane}>
-                Add
-              </button>
-              {swimlanes ? (
-                <div className="buttons">
-                  <button onClick={handleScreen}>Json</button>
-                  <button onClick={saveDiagram}>Save</button>
-                  <button onClick={reset}>Reset</button>
-                </div>
-              ) : null}
-              {Object.entries(swimlanes) &&
-                Object.entries(swimlanes).map(([key, swimlane], index) => {
+              {sortedSwimlane &&
+                sortedSwimlane.map(([key, swimlane], index) => {
                   return (
                     <Canvas
                       key={key}
                       id={key}
                       swimlane={swimlane}
                       index={index + 1}
+                      childRef={handleRef}
                     />
                   );
                 })}
             </div>
-            {selectedSwimlane ? !ccp ? <PropertiesPanel /> : <Ccp /> : null}
           </div>
         </div>
       )}
     </>
   );
 }
+Bqflow.propTypes = {
+  palette: PropTypes.array.isRequired,
+  data: PropTypes.object,
+};
 
 export default Bqflow;

@@ -4,6 +4,7 @@ import {
   Transformer,
   Text as KonvaText,
 } from "react-konva";
+import Menu from "../components/Menu/Menu";
 import { LIMITS } from "../state/constants";
 import { updateLinePoint } from "../state/lineState";
 import {
