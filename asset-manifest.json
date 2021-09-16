@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/react-flow-chart/static/css/main.e285d88a.chunk.css",
+    "main.js": "/react-flow-chart/static/js/main.0f405e7b.chunk.js",
+    "main.js.map": "/react-flow-chart/static/js/main.0f405e7b.chunk.js.map",
+    "runtime-main.js": "/react-flow-chart/static/js/runtime-main.5ad3eeda.js",
+    "runtime-main.js.map": "/react-flow-chart/static/js/runtime-main.5ad3eeda.js.map",
+    "static/js/2.4fcbacef.chunk.js": "/react-flow-chart/static/js/2.4fcbacef.chunk.js",
+    "static/js/2.4fcbacef.chunk.js.map": "/react-flow-chart/static/js/2.4fcbacef.chunk.js.map",
+    "index.html": "/react-flow-chart/index.html",
+    "precache-manifest.2f0ad448fdc40b0c18e829fdaf78e9dc.js": "/react-flow-chart/precache-manifest.2f0ad448fdc40b0c18e829fdaf78e9dc.js",
+    "service-worker.js": "/react-flow-chart/service-worker.js",
+    "static/css/main.e285d88a.chunk.css.map": "/react-flow-chart/static/css/main.e285d88a.chunk.css.map",
+    "static/js/2.4fcbacef.chunk.js.LICENSE.txt": "/react-flow-chart/static/js/2.4fcbacef.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.5ad3eeda.js",
+    "static/js/2.4fcbacef.chunk.js",
+    "static/css/main.e285d88a.chunk.css",
+    "static/js/main.0f405e7b.chunk.js"
+  ]
+}
